@@ -18,7 +18,7 @@ class PostTypeController extends Controller
      */
     public function index()
     {
-        $data = PostTypeModel::orderBy('ordering','asc')->get();
+        $data = PostTypeModel::orderBy('ordering', 'asc')->get();
         return view('admin.post-type.index', compact('data'));
     }
 
@@ -29,23 +29,23 @@ class PostTypeController extends Controller
      */
     public function create()
     {
-         // List Posttype Template
-      $fileList = scandir(resource_path('views/themes/default/'));
-      $filterArray = $this->filter_template_posttype($fileList);
+        // List Posttype Template
+        $fileList = scandir(resource_path('views/themes/default/'));
+        $filterArray = $this->filter_template_posttype($fileList);
 
-      $filename = array();
-      foreach ($filterArray as $filterArr) {
-        $filename[] = $this->remove_extention($filterArr);
-      }
-      $file1 = array('page'=>'Choose Template');
-      foreach ($filename as $file) {
-        $file1[$file] = $file;
-      }
-      $templates = $file1; 
+        $filename = array();
+        foreach ($filterArray as $filterArr) {
+            $filename[] = $this->remove_extention($filterArr);
+        }
+        $file1 = array('page' => 'Choose Template');
+        foreach ($filename as $file) {
+            $file1[$file] = $file;
+        }
+        $templates = $file1;
 
         $ordering = PostTypeModel::max('ordering');
         $ordering = $ordering + 1;
-         return view('admin.post-type.create',compact('ordering','templates'));
+        return view('admin.post-type.create', compact('ordering', 'templates'));
     }
 
     /**
@@ -56,46 +56,46 @@ class PostTypeController extends Controller
      */
     public function store(Request $request)
     {
-      $request->validate([
-            'post_type'=> 'required',
-            'uri'=>'required|unique:cl_post_type'
-      ]);
-        
-      $medium_width = env('MEDIUM_WIDTH');
-      $medium_height = env('MEDIUM_HEIGHT');
-      $data = $request->all();
+        $request->validate([
+            'post_type' => 'required',
+            'uri' => 'required|unique:cl_post_type'
+        ]);
 
-      $file =  $request->file('banner');
-      $banner = '';
-      if($request->hasfile('banner')){
-        $product = $request->file('banner')->getClientOriginalName();
-        $extension = $request->file('banner')->getClientOriginalExtension();
-        $product = explode('.', $product);
-        $banner = Str::slug($product[0]) . '-' . Str::random(40) . '.' . $extension;
+        $medium_width = env('MEDIUM_WIDTH');
+        $medium_height = env('MEDIUM_HEIGHT');
+        $data = $request->all();
 
-        $destinationPath_medium = public_path('uploads/medium');
-        $destinationOriginal = public_path('uploads/original');
+        $file = $request->file('banner');
+        $banner = '';
+        if ($request->hasfile('banner')) {
+            $product = $request->file('banner')->getClientOriginalName();
+            $extension = $request->file('banner')->getClientOriginalExtension();
+            $product = explode('.', $product);
+            $banner = Str::slug($product[0]) . '-' . Str::random(40) . '.' . $extension;
 
-        $banner_picture = Image::make($file->getRealPath());
-        $width = Image::make($file->getRealPath())->width();
-        $height = Image::make($file->getRealPath())->height();      
+            $destinationPath_medium = public_path('uploads/medium');
+            $destinationOriginal = public_path('uploads/original');
 
-        $banner_picture->save($destinationOriginal .'/'. $banner);
-        $banner_picture->resize($medium_width, $medium_height, function($constraint){
-          $constraint->aspectRatio();
-        })->save($destinationPath_medium .'/'. $banner ); 
+            $banner_picture = Image::make($file->getRealPath());
+            $width = Image::make($file->getRealPath())->width();
+            $height = Image::make($file->getRealPath())->height();
 
-        /*Upload Original Image*/
-        // $banner_picture->resize($width, $height, function($constraint){
-        //   $constraint->aspectRatio();
-        // })->save($destinationOriginal .'/'. $banner ); 
-      }
+            $banner_picture->save($destinationOriginal . '/' . $banner);
+            $banner_picture->resize($medium_width, $medium_height, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath_medium . '/' . $banner);
 
-      $data['banner'] = $banner;
+            /*Upload Original Image*/
+            // $banner_picture->resize($width, $height, function($constraint){
+            //   $constraint->aspectRatio();
+            // })->save($destinationOriginal .'/'. $banner );
+        }
+
+        $data['banner'] = $banner;
         $data['uri'] = Str::slug($request->uri);
         $result = PostTypeModel::create($data);
-        if($result){
-            return redirect()->back()->with('message','Stored Successfully.');
+        if ($result) {
+            return redirect()->back()->with('message', 'Stored Successfully.');
         }
     }
 
@@ -119,22 +119,22 @@ class PostTypeController extends Controller
     public function edit(PostTypeModel $postTypeModel, $posttype, $id)
     {
 
-       // List Posttype Template
-       $fileList = scandir(resource_path('views/themes/default/'));
-       $filterArray = $this->filter_template_posttype($fileList);
- 
-       $filename = array();
-       foreach ($filterArray as $filterArr) {
-         $filename[] = $this->remove_extention($filterArr);
-       }
-       $file1 = array('page'=>'Choose Template');
-       foreach ($filename as $file) {
-         $file1[$file] = $file;
-       }
-       $templates = $file1; 
+        // List Posttype Template
+        $fileList = scandir(resource_path('views/themes/default/'));
+        $filterArray = $this->filter_template_posttype($fileList);
 
-        $data = PostTypeModel::find( $id );
-        return view('admin.post-type.edit', compact('data','templates'));
+        $filename = array();
+        foreach ($filterArray as $filterArr) {
+            $filename[] = $this->remove_extention($filterArr);
+        }
+        $file1 = array('page' => 'Choose Template');
+        foreach ($filename as $file) {
+            $file1[$file] = $file;
+        }
+        $templates = $file1;
+
+        $data = PostTypeModel::find($id);
+        return view('admin.post-type.edit', compact('data', 'templates'));
     }
 
     /**
@@ -147,51 +147,51 @@ class PostTypeController extends Controller
     public function update(Request $request, PostTypeModel $postTypeModel, $posttype, $id)
     {
         $request->validate([
-            'post_type'=> 'required',
-            'uri'=>'required'
+            'post_type' => 'required',
+            'uri' => 'required'
         ]);
         $medium_width = env('MEDIUM_WIDTH');
         $medium_height = env('MEDIUM_HEIGHT');
         $data = PostTypeModel::find($id);
         $product_name = '';
 
-        $file =  $request->file('banner');
-    
-      if($request->hasfile('banner')){
-        $data = PostTypeModel::find($id); 
-        if($data->banner){
-          if(file_exists(env('PUBLIC_PATH').'uploads/medium/' . $data->banner)){
-            unlink(env('PUBLIC_PATH').'uploads/medium/' . $data->banner);
-          }
-          if(file_exists(env('PUBLIC_PATH').'uploads/original/' . $data->banner)){
-            unlink(env('PUBLIC_PATH').'uploads/original/' . $data->banner);
-          }
+        $file = $request->file('banner');
+
+        if ($request->hasfile('banner')) {
+            $data = PostTypeModel::find($id);
+            if ($data->banner) {
+                if (file_exists(env('PUBLIC_PATH') . 'uploads/medium/' . $data->banner)) {
+                    unlink(env('PUBLIC_PATH') . 'uploads/medium/' . $data->banner);
+                }
+                if (file_exists(env('PUBLIC_PATH') . 'uploads/original/' . $data->banner)) {
+                    unlink(env('PUBLIC_PATH') . 'uploads/original/' . $data->banner);
+                }
+            }
+            $product = $request->file('banner')->getClientOriginalName();
+            $extension = $request->file('banner')->getClientOriginalExtension();
+            $product = explode('.', $product);
+            $product_name = Str::slug($product[0]) . '-' . Str::random(40) . '.' . $extension;
+
+            $destinationPath_medium = public_path('uploads/medium');
+            $destinationOriginal = public_path('uploads/original');
+
+            $product_picture = Image::make($file->getRealPath());
+            $width = Image::make($file->getRealPath())->width();
+            $height = Image::make($file->getRealPath())->height();
+
+            $product_picture->save($destinationOriginal . '/' . $product_name);
+            $product_picture->resize($medium_width, $medium_height, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath_medium . '/' . $product_name);
+
+            /*Upload Original Image*/
+            // $product_picture->resize($width, $height, function($constraint){
+            //   $constraint->aspectRatio();
+            // })->save($destinationOriginal .'/'. $product_name );
+
+            $data->banner = $product_name;
         }
-        $product = $request->file('banner')->getClientOriginalName();
-        $extension = $request->file('banner')->getClientOriginalExtension();
-        $product = explode('.', $product);
-        $product_name = Str::slug($product[0]) . '-' . Str::random(40) . '.' . $extension;
 
-        $destinationPath_medium = public_path('uploads/medium');
-        $destinationOriginal = public_path('uploads/original');
-
-        $product_picture = Image::make($file->getRealPath());
-        $width = Image::make($file->getRealPath())->width();
-        $height = Image::make($file->getRealPath())->height();    
-
-         $product_picture->save($destinationOriginal .'/'. $product_name);
-        $product_picture->resize($medium_width, $medium_height, function($constraint){
-          $constraint->aspectRatio();
-        })->save($destinationPath_medium .'/'. $product_name ); 
-
-        /*Upload Original Image*/
-        // $product_picture->resize($width, $height, function($constraint){
-        //   $constraint->aspectRatio();
-        // })->save($destinationOriginal .'/'. $product_name ); 
-
-        $data->banner = $product_name;
-      }  
-        
         $data->post_type = $request->post_type;
         $data->caption = $request->caption;
         $data->meta_keyword = $request->meta_keyword;
@@ -201,10 +201,12 @@ class PostTypeController extends Controller
         $data->template = $request->template;
         $data->uid = $request->uid;
         $data->ordering = $request->ordering;
-        $data->is_menu = $request->is_menu;        
-        $data->is_footer_menu = $request->is_footer_menu;        
+        $data->is_menu = $request->is_menu;
+        $data->is_footer_menu = $request->is_footer_menu;
+        $data->is_disclosure = $request->is_disclosure;
         $data->save();
-        return redirect()->back()->with('message','Update Successful.');
+
+        return redirect()->back()->with('message', 'Update Successful.');
     }
 
     /**
@@ -216,35 +218,37 @@ class PostTypeController extends Controller
     public function destroy(PostTypeModel $postTypeModel, $posttype, $id)
     {
         $data = PostTypeModel::find($id);
-         if($data->banner){
-          if(file_exists(env('PUBLIC_PATH').'uploads/medium/' . $data->banner)){
-            unlink(env('PUBLIC_PATH').'uploads/medium/' . $data->banner);
-          }
-          if(file_exists(env('PUBLIC_PATH').'uploads/original/' . $data->banner)){
-            unlink(env('PUBLIC_PATH').'uploads/original/' . $data->banner);
-          }
+        if ($data->banner) {
+            if (file_exists(env('PUBLIC_PATH') . 'uploads/medium/' . $data->banner)) {
+                unlink(env('PUBLIC_PATH') . 'uploads/medium/' . $data->banner);
+            }
+            if (file_exists(env('PUBLIC_PATH') . 'uploads/original/' . $data->banner)) {
+                unlink(env('PUBLIC_PATH') . 'uploads/original/' . $data->banner);
+            }
         }
         $data->delete();
     }
 
-     // Filter Template Child
-     private function filter_template_posttype($template){
+    // Filter Template Child
+    private function filter_template_posttype($template)
+    {
         $tmpl2 = array();
-        if(!empty($template)){
-          foreach($template as $tmpl){
-            if(strpos($tmpl, "posttypeTemplate-") !== false){
-              $tmpl2[] = $tmpl;
-            }   
-          }
+        if (!empty($template)) {
+            foreach ($template as $tmpl) {
+                if (strpos($tmpl, "posttypeTemplate-") !== false) {
+                    $tmpl2[] = $tmpl;
+                }
+            }
         }
         return $tmpl2;
-      }
+    }
 
     // Remove Extention
-    private function remove_extention($filename){
-      $exp = explode('.',$filename);
-      $file = $exp[0];
-      return $file;
+    private function remove_extention($filename)
+    {
+        $exp = explode('.', $filename);
+        $file = $exp[0];
+        return $file;
     }
 
 }

@@ -15,12 +15,13 @@ class HeaderComposer{
     }
 
 	public function compose(View $view){
-		$view->with('navigations', PostTypeModel::where(['is_menu'=>'1'])->orderBy('ordering','asc')->get());
+		$view->with('navigations', PostTypeModel::where(['is_menu'=>'1' ,'is_disclosure'=>'0'])->orderBy('ordering','asc')->get());
+		$view->with('disclosure', PostTypeModel::where(['is_menu'=>'1' ,'is_disclosure'=>'1'])->orderBy('ordering','asc')->get());
 		$view->with('setting', SettingModel::where('id',1)->first());
 		$view->with('services', PostModel::where(['post_type'=>'2','post_parent'=>'0'])->orderBy('id','asc')->get());
 
-			
-			
+
+
 	}
-	
+
 }

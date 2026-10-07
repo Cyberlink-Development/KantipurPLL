@@ -39,6 +39,8 @@
                             Request::segment(3) == 'product' ||
                             Request::segment(2) == 'about' ||
                             Request::segment(3) == 'about' ||
+                            Request::segment(2) == 'notice' ||
+                            Request::segment(2) == 'downloads' ||
                             Request::segment(2) == 'blog' ||
                             Request::segment(2) == 'gallery' ||
                             Request::segment(2) == 'contact' ||
@@ -67,13 +69,13 @@
                                 </a>
                             </li>
                             <!-- @if (Auth::id() == 1)
-                                <li>
+<li>
                                     <a href="{{ url('admin/postcategory') }}">
                                         <span class="fa fa-arrows"></span>
                                         Post Categories
                                     </a>
                                 </li>
-                            @endif -->
+@endif -->
                         @endif
                         <!-- Post Type List -->
                         @if ($posttype)
@@ -178,15 +180,14 @@
             @endif
 
             <li class="">
-                @if (Request::segment(2) == 'contact_us' ||
-                    Request::segment(2) == 'application')
+                @if (Request::segment(2) == 'contact_us' || Request::segment(2) == 'application')
                     <a class="accordion-toggle menu-open">
-                @else
-                    <a class="accordion-toggle">
+                    @else
+                        <a class="accordion-toggle">
                 @endif
-                    <span class="glyphicon glyphicon-user text-info"></span>
-                    <span class="sidebar-title">Applications & Inquiries</span>
-                    <span class="caret"></span>
+                <span class="glyphicon glyphicon-user text-info"></span>
+                <span class="sidebar-title">Applications & Inquiries</span>
+                <span class="caret"></span>
                 </a>
                 <ul class="nav sub-nav">
                     <li class="{{ Request::segment(2) == 'application' ? 'active' : '' }}">

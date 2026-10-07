@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class PostTypeModel extends Model
 {
     protected $table = 'cl_post_type';
-    protected $fillable = ['post_type','uri','uid','caption','banner','content','ordering','is_menu','is_footer_menu'];
+    protected $fillable = ['post_type', 'uri', 'uid', 'template', 'caption', 'banner', 'content', 'ordering', 'is_menu', 'is_footer_menu', 'is_disclosure'];
 }

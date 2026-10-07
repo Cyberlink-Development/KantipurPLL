@@ -21,7 +21,7 @@
 						<label for="inputStandard" class="col-lg-2 control-label">Title</label>
 						<div class="col-lg-8">
 							<div class="bs-component">
-								<input type="text" id="title" name="title" class="form-control" placeholder="" />
+								<input type="text" id="title" name="title" class="form-control" placeholder="" required/>
 							</div>
 						</div>
 					</div>
@@ -29,7 +29,7 @@
 						<label for="inputStandard" class="col-lg-2 control-label"> Image </label>
 						<div class="col-lg-8">
 							<div class="bs-component">
-								<input type="file" name="file_image" id="file_image" class="form-control" />
+								<input type="file" name="file_image" id="file_image" class="form-control" required/>
 							</div>
 							( Width: 1000px, Height: 500px) <br />
 							Please upload same size all time. Image size must be less than 2048 KB.

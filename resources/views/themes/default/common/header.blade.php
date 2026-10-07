@@ -9,9 +9,9 @@
     <script src="{{ asset('themes-assets/js/uikit.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('themes-assets/css/style.css')}}">
     <link rel="stylesheet" href="{{ asset('themes-assets/css/global.css')}}">
-    <script src="https://kit.fontawesome.com/7254a5967d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-     
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"/>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -38,14 +38,14 @@
     @if (trim($__env->yieldContent('thumbnail')))
 	   <meta property="og:image" content="{{ asset('uploads/original/' ) }}/@yield('thumbnail')" />
 	@else
-	   <meta property="og:image" content="{{asset('theme-assets/images/favicon.png')}}" />
+	   <meta property="og:image" content="{{asset('themes-assets/images/favicon.png')}}" />
 	@endif
     <meta property="og:image:width" content="1000"/>
     <meta property="og:image:height" content="600"/>
     @if (trim($__env->yieldContent('thumbnail')))
     <meta name="twitter:image" content="{{ asset('uploads/original/' ) }}/@yield('thumbnail')"/>
     @else
-    <meta property="twitter:image" content="{{ asset('theme-assets/images/logo.png') }}"/>
+    <meta property="twitter:image" content="{{ asset('themes-assets/images/logo.png') }}"/>
     @endif
     <meta name="twitter:url" content="{{url()->current()}}">
     <meta name="twitter:title" content="@yield('title')">
@@ -89,6 +89,16 @@
 									</li>
 								@endif
 							@endforeach
+                            <li>
+                                <a>Disclosure<span uk-navbar-parent-icon></span></a>
+                                <div class="uk-navbar-dropdown">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                        @foreach ($disclosure as $row)
+                                            <li><a href="{{ url('page/' . posttype_url($row->uri)) }}">{{$row->post_type}} </a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                     <div class="uk-navbar-right">
